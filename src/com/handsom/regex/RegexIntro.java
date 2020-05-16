@@ -1,5 +1,7 @@
 package com.handsom.regex;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,14 +43,95 @@ public class RegexIntro {
         String reg = "\\bcat\\b";
     }
 
+    //可选元素 ?
+    {
+        //匹配某个元素有或者没有，这里匹配"color"或者"colour",即u字符有一次或者没有
+        String reg = "colou?r";
+        //如果想作用于多个元素，打上小括号即可 ,即匹配"seven"或者"seventh"
+        String regMulti = "seven(th)?";
+    }
+
+    //重复出现   和可选元素符号"?"的作用类似
+    {
+        //"+" 表示"之前紧邻的元素出现一次或多次”，而"*" 表示“之前紧邻的元素出现任意多次，或者不出现
+        //这个可以匹配"hadoop",也可以匹配“hadop”,但是不可以匹配"hadp"
+        String reg = "hado+p";
+        //这个可以匹配"hadoop",也可以匹配“hadop”,还可以匹配"hadp"
+        String reg2 = "hado*p";
+        //也可以使用小括号匹配多个元素
+        String reg3 = "had(op)+";
+
+        //这里讲一个特殊符号"."点号，在字符组的时候提过,点可匹配任意单个字符
+        //加上"*"之后就可以匹配任意字符串，这个经常用到，目的是忽略你不关心的那部分字符串
+        String regDot = ".*";
+    }
+
+    //=================================================================
+
+    //重头戏
+    //小括号的作用：之前已经提到2个基本的作用。1: 限制多选结构的范围，即"|"可以打括号；2: 重复出现操作的单元
+    //第三个功能（important）：捕获文本，反向引用
+    {
+        /**
+         * 反向引用是正则表达式的特性之一，它容许我们匹配与表达式先前部分匹配的同样的文本
+         * @see RegexIntro#brackets()
+         */
+        String reg = "([a-zA-Z]+) +\\1";
+
+        /**
+         * 分组捕获
+         */
+        String regGroup = "";
+    }
+
+
 
     public static void main(String[] args) {
-        String s = "\\bcat\\b";
-        Pattern compile = Pattern.compile(s);
-        Matcher matcher = compile.matcher("cat bit me category");
+        capture();
+    }
+
+    //java中的正则表达式的简单使用
+    public static void apiIntro(){
+        String reg = "\\bcat\\b";
+        Pattern compile = Pattern.compile(reg);
+        String target = "cat bit me category";
+        Matcher matcher = compile.matcher(target);
+        //是否有匹配的子串
         boolean b = matcher.find();
+        //整个字符串是否完全匹配
+        boolean matches = matcher.matches();
+        //匹配上的子串值
         String group = matcher.group();
         int end = matcher.end();
         System.out.println(end);
+    }
+
+    public static void brackets(){
+        //"([a-zA-Z]+)" 这个表示一个单元，"\\1"表示这个前面的第一个单元（即第一个括号），"\\2"表示前面第二个括号的内容，以此类推
+        String reg = "([a-zA-Z]+) +\\1";
+        Pattern compile = Pattern.compile(reg);
+        Matcher matcher = compile.matcher("the the the   the");
+        if(matcher.find()){
+            //这里的group是"the the"
+            String group = matcher.group();
+            //group1是"the"
+            String group1 = matcher.group(1);
+            int start = matcher.start();
+            int end = matcher.end();
+            System.out.println(start + ";" + end + ";" + group);
+        }
+    }
+
+    public static void capture(){
+        String s = "dsadsadas<peter>dsadasdas<lionel>\"www.163.com\"<kenny><>";
+        Pattern p = Pattern.compile("(<[^>]*>)");
+        Matcher m = p.matcher(s);
+        List<String> result=new ArrayList<String>();
+        while(m.find()){
+            result.add(m.group());
+        }
+        for(String s1:result){
+            System.out.println(s1);
+        }
     }
 }
