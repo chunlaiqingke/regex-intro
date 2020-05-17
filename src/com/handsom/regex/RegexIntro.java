@@ -58,8 +58,11 @@ public class RegexIntro {
         String reg = "hado+p";
         //这个可以匹配"hadoop",也可以匹配“hadop”,还可以匹配"hadp"
         String reg2 = "hado*p";
-        //也可以使用小括号匹配多个元素
+        //也可以使用小括号匹配多个元素,起到分组的作用
         String reg3 = "had(op)+";
+
+        //区间量词,表示最少0次o，最多4次o
+        String reg4 = "hado{0,4}p";
 
         //这里讲一个特殊符号"."点号，在字符组的时候提过,点可匹配任意单个字符
         //加上"*"之后就可以匹配任意字符串，这个经常用到，目的是忽略你不关心的那部分字符串
@@ -74,14 +77,23 @@ public class RegexIntro {
     {
         /**
          * 反向引用是正则表达式的特性之一，它容许我们匹配与表达式先前部分匹配的同样的文本
+         * 反向引用的就是小括号捕获的文本
          * @see RegexIntro#brackets()
          */
         String reg = "([a-zA-Z]+) +\\1";
 
         /**
-         * 分组捕获
+         * 捕获和非捕获型括号
+         * 之前说括号是用来分组的，括号还有捕获的作用，如上面的"([a-zA-Z]+) +\\1"表达式，"\\1"使用的就是括号捕获的东西，
+         * 但是有的情况下并不想捕获，因为捕获影响效率，或者并不想捕获的东西放到对应的位置上，只希望括号分组就好了，就使用(?:)
+         * @see RegexIntro#capture()
+         *
+         * 特别注意：小括号分组的顺序是按照左括号的顺序来的，即使嵌套也是按照左括号的顺序
          */
-        String regGroup = "";
+        String regGroup = "([a-z]+) +(?:[0-9]+) + ([A-Z]+) +\\1 + \\2";
+
+        //嵌套的捕获，"\\1"代表"(a(b(c)))"捕获的内容，"\\2"代表"(b(c))"捕获的内容
+        String regGroup2 = "(a(b(c))) +\\1 + \\2";
     }
 
 
@@ -123,8 +135,10 @@ public class RegexIntro {
     }
 
     public static void capture(){
-        String s = "dsadsadas<peter>dsadasdas<lionel>\"www.163.com\"<kenny><>";
-        Pattern p = Pattern.compile("(<[^>]*>)");
+        String s = "the 110 WHY the WHY";
+        //这里的"\\2"已经不是代表"(?:[0-9]+)"这个括号了，因为这个括号只是分组并不捕获
+        //所以"the 110 WHY the 110"这个字符串是不匹配的
+        Pattern p = Pattern.compile("([a-z]+) +(?:[0-9]+) +([A-Z]+) +\\1 +\\2");
         Matcher m = p.matcher(s);
         List<String> result=new ArrayList<String>();
         while(m.find()){
