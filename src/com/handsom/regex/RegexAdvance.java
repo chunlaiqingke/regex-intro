@@ -10,14 +10,23 @@ public class RegexAdvance {
 
     /**
      * 环视，不匹配字符，而是特定的位置，比如大数字加逗号"1345347834" -> "1,345,347,834"
+     * @see RegexDemo#addComma()
      * 顺序环视"(?=)"，逆序环视"(?<=)"
-     * @see RegexAdvance#lookAround()
+     *
+     * 补充：对应的还有 否定顺序(?!)和否定逆序(?<!), 就是把"="替换成"!" :: 意思是不能匹配；
+     * 比如某个符号（或位置）的左边是字符，右边不是字符， 单词分界符"\\b"可以使用"(?＜!\\w)(?=\\w) |(?＜=\\w)(?!\\w))"
      */
     {
-        //意思是这个位置的后面是handsome，就能匹配上那个位置，字符不占位置，可以理解成字符之间的间隙
+        /**
+         * 意思是这个位置的后面是handsome，就能匹配上那个位置，字符不占位置，可以理解成字符之间的间隙
+         * @see RegexAdvance#lookAround()
+         */
         String regAsc = "(?=handsome)";
 
-        //意思是这个位置的前面是handsome，就能匹配上那个位置，字符不占位置，可以理解成字符之间的间隙
+        /**
+         * 意思是这个位置的前面是handsome，就能匹配上那个位置，字符不占位置，可以理解成字符之间的间隙
+         * @see RegexAdvance#lookAround2()
+         */
         String regDesc = "(?<=handsome)";
     }
 
