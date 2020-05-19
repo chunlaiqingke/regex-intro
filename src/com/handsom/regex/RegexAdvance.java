@@ -30,8 +30,19 @@ public class RegexAdvance {
         String regDesc = "(?<=handsome)";
     }
 
+    /**
+     * 模式修饰符 (?修饰符)
+     */
+    {
+        /**
+         * 修饰符"i"表示忽略大小写
+         * @see RegexAdvance#modifier()
+         */
+        String reg = "(?i:very)";
+    }
+
     public static void main(String[] args) {
-        lookAround2();
+        modifier();
     }
 
     //顺序环视
@@ -64,5 +75,16 @@ public class RegexAdvance {
             System.out.println(group);
         }
         System.out.println();
+    }
+
+    private static void modifier(){
+        String str = "VERY";
+        String reg = "(?i:very)";
+        Pattern compile = Pattern.compile(reg);
+        Matcher matcher = compile.matcher(str);
+        if(matcher.find()) {
+            String group = matcher.group();
+            System.out.println(group);
+        }
     }
 }
